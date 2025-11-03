@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="profiles@localhost">
+  <database-model serializer="dbm" dbms="MARIADB" family-id="MARIADB" format-version="4.53">
+    <root id="1">
+      <DefaultAuthPlugin>mysql_native_password</DefaultAuthPlugin>
+      <DefaultCasing>lower/lower</DefaultCasing>
+      <DefaultEngine>InnoDB</DefaultEngine>
+      <ServerVersion>10.4.32</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="information_schema">
+      <CollationName>utf8_general_ci</CollationName>
+    </schema>
+    <schema id="3" parent="1" name="mysql">
+      <CollationName>utf8mb4_general_ci</CollationName>
+    </schema>
+    <schema id="4" parent="1" name="performance_schema">
+      <CollationName>utf8_general_ci</CollationName>
+    </schema>
+    <schema id="5" parent="1" name="phpmyadmin">
+      <CollationName>utf8_bin</CollationName>
+    </schema>
+    <schema id="6" parent="1" name="profiles">
+      <AutoIntrospectionLevel>3</AutoIntrospectionLevel>
+      <Current>1</Current>
+      <LastIntrospectionLevel>3</LastIntrospectionLevel>
+      <LastIntrospectionLocalTimestamp>2025-10-27.23:38:31</LastIntrospectionLocalTimestamp>
+      <CollationName>utf8mb4_general_ci</CollationName>
+    </schema>
+    <schema id="7" parent="1" name="test">
+      <CollationName>latin1_swedish_ci</CollationName>
+    </schema>
+    <table id="8" parent="6" name="profiles">
+      <DetailsLevel>3</DetailsLevel>
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_unicode_ci</CollationName>
+    </table>
+    <check id="9" parent="8" name="CONSTRAINT_1">
+      <NameSurrogate>1</NameSurrogate>
+      <Predicate>`rank` in (&apos;Rct.&apos;,&apos;Pvt.&apos;,&apos;L/Cpl.&apos;,&apos;Cpl.&apos;,&apos;Sgt.&apos;,&apos;S/Sgt.&apos;,&apos;2 Lt.&apos;,&apos;Lt.&apos;,&apos;Capt.&apos;,&apos;Maj.&apos;)</Predicate>
+    </check>
+    <column id="10" parent="8" name="id">
+      <AutoIncrement>27</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int(11)|0s</StoredType>
+    </column>
+    <column id="11" parent="8" name="discord_id">
+      <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
+    </column>
+    <column id="12" parent="8" name="rank">
+      <DefaultExpression>&apos;Rct.&apos;</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>varchar(12)|0s</StoredType>
+    </column>
+    <column id="13" parent="8" name="first_name">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>varchar(25)|0s</StoredType>
+    </column>
+    <column id="14" parent="8" name="surname">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StoredType>varchar(25)|0s</StoredType>
+    </column>
+    <column id="15" parent="8" name="level">
+      <DefaultExpression>1</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+      <StoredType>int(11)|0s</StoredType>
+    </column>
+    <column id="16" parent="8" name="is_nco">
+      <DefaultExpression>0</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+      <StoredType>tinyint(1)|0s</StoredType>
+    </column>
+    <column id="17" parent="8" name="is_officer">
+      <DefaultExpression>0</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>8</Position>
+      <StoredType>tinyint(1)|0s</StoredType>
+    </column>
+    <column id="18" parent="8" name="created_at">
+      <DefaultExpression>current_timestamp()</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>9</Position>
+      <StoredType>timestamp|0s</StoredType>
+    </column>
+    <column id="19" parent="8" name="updated_at">
+      <DefaultExpression>current_timestamp()</DefaultExpression>
+      <NotNull>1</NotNull>
+      <OnUpdate>current_timestamp()</OnUpdate>
+      <Position>10</Position>
+      <StoredType>timestamp|0s</StoredType>
+    </column>
+    <index id="20" parent="8" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="21" parent="8" name="discord_id">
+      <ColNames>discord_id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="22" parent="8" name="surname">
+      <ColNames>discord_id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="23" parent="8" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="24" parent="8" name="discord_id">
+      <UnderlyingIndexName>discord_id</UnderlyingIndexName>
+    </key>
+    <key id="25" parent="8" name="surname">
+      <UnderlyingIndexName>surname</UnderlyingIndexName>
+    </key>
+  </database-model>
+</dataSource>
