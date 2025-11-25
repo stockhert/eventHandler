@@ -129,7 +129,7 @@ class Profile(commands.Cog):
             with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM profiles WHERE discord_id = %s", (target_user_id,))
                 existing_profile = cursor.fetchone()
-                
+
                 if not existing_profile:
                     await interaction.response.send_message(
                         "❌ No profile found to delete.",
@@ -145,13 +145,13 @@ class Profile(commands.Cog):
                 else:
                     message = f"⚠️ Are you sure you want to delete your profile?\n" \
                               f"**{existing_profile['rank']} {existing_profile['first_name']}. {existing_profile['surname']}**"
-                
+
                 await interaction.response.send_message(
                     message,
                     view=view,
                     ephemeral=True
                 )
-                
+
         except Exception as e:
             print(f"[deleteprofile]: Error: {e}")
             await interaction.response.send_message(
@@ -232,7 +232,7 @@ class Profile(commands.Cog):
                 return
 
             embed = discord.Embed(
-                title=f"{profile['rank']} {profile['first_name']} {profile['surname']}",
+                title=f"{profile['rank']} {profile['first_name']}. {profile['surname']}",
                 color=discord.Color.dark_teal()
             )
 
@@ -273,13 +273,13 @@ class Profile(commands.Cog):
             timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             filename = f"profiles_{timestamp}.sql"
 
-            # .env variables, change in .env file. defaults contained just in case ;)
+            # .env variables, change in .env file. defaults contained just in case
             db_host = os.getenv('DB_HOST', 'localhost')
             db_user = os.getenv('DB_USER', 'root')
             db_password = os.getenv('DB_PASSWORD', '')
             db_name = os.getenv('DB_NAME', 'profiles')
 
-            path = r"C:\xampp\mysql\bin\mysqldump.exe" # might wanna change sometime .........
+            path = os.getenv('mysqldumpPath') # might wanna change sometime .........
             command = [
                 path,
                 "-h", db_host,
@@ -304,7 +304,7 @@ class Profile(commands.Cog):
         except FileNotFoundError:
             print(f"[/dump]: Error: mysqldump not found: {e}")
             await interaction.followup.send(
-                "Error: `mysqldump` command not found. Please install MySQL client tools.",
+                "Error: `mysqldump` command not found. (install MySQL client tools!!)",
                 ephemeral=True
             )
         except Exception as e:
