@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="PY-252.26830.99">
-    <data-source name="profiles@localhost" uuid="05ee04c5-71b1-43b7-a7eb-5897de01d26b">
-      <database-info product="MySQL" version="5.5.5-10.4.32-MariaDB" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)" dbms="MARIADB" exact-version="10.4.32" exact-driver-version="8.2">
-        <extra-name-characters>#@</extra-name-characters>
+  <component name="dataSourceStorageLocal" created-in="WS-253.30387.83">
+    <data-source name="userDB@localhost" uuid="23c450d6-47cc-4513-ab21-e1b4cb12cc9a">
+      <database-info product="MySQL" version="5.5.5-10.4.32-MariaDB" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-9.5.0 (Revision: a7b3c94f50efbddb9f0dd69b3e0d1aaa25305cd6)" dbms="MARIADB" exact-version="10.4.32" exact-driver-version="9.5">
+        <extra-name-characters>$</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
+      <secret-storage>master_key</secret-storage>
       <user-name>root</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="schema" qname="profiles" />
+          <node kind="schema" qname="userdb" />
         </introspection-scope>
       </schema-mapping>
     </data-source>

@@ -20,4 +20,4 @@ async def dump(self, interaction: discord.Interaction, opname: str = None, date:
             cursor.execute(f"CREATE TABLE {OpName} (event_name VARCHAR(255), event_date DATE, event_time TIME, attendingID VARCHAR(255))")
 
 async def setup(bot):
-    await bot.add_cog(Profile(bot))
+    await bot.add_cog(Events(bot))

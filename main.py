@@ -16,10 +16,10 @@ if not TOKEN:
 # -------------------- Intents --------------------
 intents = discord.Intents.default()
 intents.message_content = True
-bot = commands.Bot(command_prefix="jarvis,", intents=intents)
+bot = commands.Bot(command_prefix="jarvis,", intents=intents) #jarvis, ban this guy
 
 # -------------------- Database --------------------
-def get_db_connection(): #used literally everywhere dont edelete ts
+def get_db_connection(): #used literally everywhere dont delete ts
     try:
         connection = pymysql.connect(
             host=os.getenv("DB_HOST"),

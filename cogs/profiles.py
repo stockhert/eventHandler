@@ -1,3 +1,6 @@
+import os
+import shutil
+
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -266,7 +269,6 @@ class Profile(commands.Cog):
         await interaction.response.defer(ephemeral=True)
         filename = None
         try:
-            import os
             import subprocess
             from datetime import datetime
 
@@ -277,9 +279,17 @@ class Profile(commands.Cog):
             db_host = os.getenv('DB_HOST', 'localhost')
             db_user = os.getenv('DB_USER', 'root')
             db_password = os.getenv('DB_PASSWORD', '')
-            db_name = os.getenv('DB_NAME', 'profiles')
+            db_name = os.getenv('DB_NAME', 'userDB')
 
-            path = os.getenv('mysqldumpPath') # might wanna change sometime .........
+            path = os.getenv('mysqldumpPath')
+            if path:
+                path = path.strip().strip('"').strip("'")
+            path = path or shutil.which('mysqldump')
+            if not path:
+                raise FileNotFoundError(
+                    "Set `mysqldumpPath` in `.env` or install `mysqldump` so it is available in PATH."
+                )
+
             command = [
                 path,
                 "-h", db_host,
@@ -301,16 +311,15 @@ class Profile(commands.Cog):
                 ephemeral=True
             )
 
-        except FileNotFoundError:
+        except FileNotFoundError as e:
             print(f"[/dump]: Error: mysqldump not found: {e}")
             await interaction.followup.send(
-                "Error: `mysqldump` command not found. (install MySQL client tools!!)",
+                f"Error: {e}",
                 ephemeral=True
             )
         except Exception as e:
             await interaction.followup.send(f"Error during dump: {e}", ephemeral=True)
         finally:
-
             if filename and os.path.exists(filename):
                 os.remove(filename)
 
