@@ -25,7 +25,7 @@ class ConfirmDeleteView(discord.ui.View):
 
             self.value = True
             await interaction.response.edit_message(
-                content="✅ Profile deleted successfully!",
+                content="Profile deleted successfully!",
                 view=None
             )
             self.stop()
@@ -33,7 +33,7 @@ class ConfirmDeleteView(discord.ui.View):
             print(f"[confirm]: Error deleting profile: {e}")
             self.value = False
             await interaction.response.edit_message(
-                content="❌ An error occurred while deleting the profile.",
+                content="An error occurred while deleting the profile.",
                 view=None
             )
             self.stop()
@@ -42,7 +42,7 @@ class ConfirmDeleteView(discord.ui.View):
     async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
         self.value = False
         await interaction.response.edit_message(
-            content="❌ Profile deletion cancelled.",
+            content="Profile deletion cancelled.",
             view=None
         )
         self.stop()
@@ -76,7 +76,7 @@ class Profile(commands.Cog):
 
                 if existing_profile:
                     await interaction.response.send_message(
-                        f"❌ You already have a profile! Use `/deleteprofile` to delete it.",
+                        f"You already have a profile! Use `/deleteprofile` to delete it.",
                         ephemeral=True
                     )
                     return
@@ -105,7 +105,7 @@ class Profile(commands.Cog):
         except Exception as e:
             print(f"[/createprofile]: Error creating profile: {e}")
             await interaction.response.send_message(
-                "❌ An error occurred while creating your profile. Please try again later.",
+                "An error occurred while creating your profile. Please try again later.",
                 ephemeral=True
             )
         finally:
@@ -121,7 +121,7 @@ class Profile(commands.Cog):
         if uuid:
             if not interaction.user.guild_permissions.administrator:
                 await interaction.response.send_message(
-                    "❌ Only administrators can delete other users' profiles.",
+                    "Only administrators can delete other users' profiles.",
                     ephemeral=True
                 )
                 return
@@ -135,7 +135,7 @@ class Profile(commands.Cog):
 
                 if not existing_profile:
                     await interaction.response.send_message(
-                        "❌ No profile found to delete.",
+                        "No profile found to delete.",
                         ephemeral=True
                     )
                     connection.close()
@@ -143,10 +143,10 @@ class Profile(commands.Cog):
 
                 view = ConfirmDeleteView(target_user_id)
                 if uuid:
-                    message = f"⚠️ Are you sure you want to delete the profile for user `{target_user_id}`?\n" \
+                    message = f"Are you sure you want to delete the profile for user `{target_user_id}`?\n" \
                               f"**{existing_profile['rank']} {existing_profile['first_name']}. {existing_profile['surname']}**"
                 else:
-                    message = f"⚠️ Are you sure you want to delete your profile?\n" \
+                    message = f"Are you sure you want to delete your profile?\n" \
                               f"**{existing_profile['rank']} {existing_profile['first_name']}. {existing_profile['surname']}**"
 
                 await interaction.response.send_message(
@@ -158,7 +158,7 @@ class Profile(commands.Cog):
         except Exception as e:
             print(f"[deleteprofile]: Error: {e}")
             await interaction.response.send_message(
-                "❌ An error occurred while processing your request.",
+                "An error occurred while processing your request.",
                 ephemeral=True
             )
         finally:
@@ -172,6 +172,7 @@ class Profile(commands.Cog):
             await interaction.response.send_message("Only administrators can view all profiles..", ephemeral=True)
             return
 
+        connection = None
         try:
             connection = get_db_connection()
             with connection.cursor() as cursor:
@@ -181,12 +182,6 @@ class Profile(commands.Cog):
             if not profiles:
                 await interaction.response.send_message("No profiles found.", ephemeral=True)
                 return
-
-            # beuatuiful embed format
-            embed = discord.Embed(
-                title="All Character Profiles",
-                color=discord.Color.blue()
-            )
 
             # profile line format
             profile_lines = []
@@ -200,13 +195,45 @@ class Profile(commands.Cog):
                 )
                 profile_lines.append(profile_line)
 
-            # join all profiles with line breaks
-            embed.description = "\n\n".join(profile_lines)
+            pages = []
+            current_page = []
+            current_length = 0
+            description_limit = 3900
 
-            embed.set_footer(text=f"Total profiles: {len(profiles)} | Requested by {interaction.user.name}")
-            embed.timestamp = discord.utils.utcnow()
+            for line in profile_lines:
+                separator_length = 2 if current_page else 0
+                next_length = current_length + separator_length + len(line)
 
-            await interaction.response.send_message(embed=embed)
+                if current_page and next_length > description_limit:
+                    pages.append("\n\n".join(current_page))
+                    current_page = [line]
+                    current_length = len(line)
+                else:
+                    current_page.append(line)
+                    current_length = next_length
+
+            if current_page:
+                pages.append("\n\n".join(current_page))
+
+            embeds = []
+            for page_number, page in enumerate(pages, start=1):
+                embed = discord.Embed(
+                    title="All Character Profiles",
+                    description=page,
+                    color=discord.Color.blue()
+                )
+                embed.set_footer(
+                    text=(
+                        f"Page {page_number}/{len(pages)} | Total profiles: {len(profiles)} "
+                        f"| Requested by {interaction.user.name}"
+                    )
+                )
+                embed.timestamp = discord.utils.utcnow()
+                embeds.append(embed)
+
+            await interaction.response.send_message(embed=embeds[0])
+            for embed in embeds[1:]:
+                await interaction.followup.send(embed=embed)
 
         except Exception as e:
             print(f"[/showprofiles]: Error: {e}")

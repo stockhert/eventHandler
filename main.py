@@ -78,6 +78,7 @@ async def main():
     async with bot:
 
         await bot.load_extension('cogs.profiles') # dont forget to add cogs here
+        await bot.load_extension('cogs.event')
 
         await bot.start(TOKEN)
 

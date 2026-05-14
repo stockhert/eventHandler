@@ -4,10 +4,10 @@ from discord.ext import commands
 
 from main import get_db_connection
 
-class economy(commands.Cog):
+class Economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
 
 async def setup(bot):
-    await bot.add_cog(Profile(bot))
+    await bot.add_cog(Economy(bot))
