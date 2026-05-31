@@ -262,12 +262,9 @@ class Profile(commands.Cog):
                 return
 
             embed = discord.Embed(
-                title=f"{profile['rank']} {profile['first_name']}. {profile['surname']}",
+                title=f"{profile['rank']} {profile['first_name']} {profile['surname']}",
                 color=discord.Color.dark_teal()
             )
-
-            embed.add_field(name="Level", value=profile['level'], inline=False)
-            embed.add_field(name="Funds", value=f"${profile['funds']:,.2f}", inline=False)
 
             if profile['is_nco']:
                 embed.add_field(name="NCO", value="Yes", inline=False)

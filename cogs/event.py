@@ -15,17 +15,17 @@ ATTENDANCE_STATUSES = {
     "no": "No",
 }
 
-
+# all this MIGHT be susceptible to SQL injection but I havent and wont be testing for it. This is the best I'll ever write, ever, in my life, ever.
 def make_operation_slug(title: str) -> str:
-    slug = re.sub(r"[^a-z0-9]+", "_", title.lower()).strip("_")
+    slug = re.sub(r"[^a-z0-9]+", "_", title.lower()).strip("_") # find anything that is NOT lowercase letters or digits
     slug = re.sub(r"_+", "_", slug)
     if not slug:
         slug = "operation"
-    return f"op_{slug[:55]}"
+    return f"op_{slug[:55]}" # op_[name]
 
 
 def quote_identifier(identifier: str) -> str:
-    if not re.fullmatch(r"[a-z0-9_]{1,64}", identifier):
+    if not re.fullmatch(r"[a-z0-9_]{1,64}", identifier): # collapse repeated underscore
         raise ValueError("Unsafe SQL identifier.")
     return f"`{identifier}`"
 
@@ -205,7 +205,7 @@ class OperationEvent(commands.Cog):
         post_channel_text = await self.ask_dm(
             dm_channel,
             interaction.user,
-            "Post channel? Send a channel mention like `#events` or the channel ID.",
+            "Post channel? Send a channel mention like `#events` or the channel ID.", # fix
         )
         if post_channel_text is None:
             return None
@@ -613,6 +613,7 @@ class OperationEvent(commands.Cog):
         finally:
             connection.close()
 
+    # -------------------- /deleteevent --------------------
     @app_commands.command(name="deleteevent", description="Delete an operation event by operation ID")
     @app_commands.describe(operation_id="The operation ID shown in the event footer.")
     async def deleteevent(self, interaction: discord.Interaction, operation_id: int):
@@ -664,6 +665,7 @@ class OperationEvent(commands.Cog):
         finally:
             connection.close()
 
+    # -------------------- /listoperations --------------------
     @app_commands.command(name="listoperations", description="List all planned and past operation events")
     async def listoperations(self, interaction: discord.Interaction):
         if not interaction.guild:
@@ -739,6 +741,7 @@ class OperationEvent(commands.Cog):
         finally:
             connection.close()
 
+    # -------------------- /operationgraph --------------------
     @app_commands.command(name="operationgraph", description="Show planned and past operations as an attendee graph")
     async def operationgraph(self, interaction: discord.Interaction):
         if not interaction.guild:

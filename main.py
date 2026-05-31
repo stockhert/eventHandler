@@ -45,8 +45,6 @@ def init_db():
                 rank            VARCHAR(12)  NOT NULL default 'Rct.',
                 first_name   VARCHAR(25)   NOT NULL,
                 surname         VARCHAR(25)  NOT NULL,
-                level           INT          NOT NULL DEFAULT 1,
-                funds           INT          NOT NULL DEFAULT 0,
                 is_nco           TINYINT(1)      NOT NULL DEFAULT 0,
                 is_officer       TINYINT(1)      NOT NULL DEFAULT 0,
             
